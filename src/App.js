@@ -3,14 +3,14 @@ import { createNote, deleteNote} from './graphql/mutations'
 import { listNotes } from './graphql/queries'
 import { withAuthenticator, Button, Text, Flex, Heading } from "@aws-amplify/ui-react";
 import { useCallback, useEffect, useState } from 'react';
-import { API } from 'aws-amplify';
+//import { API } from 'aws-amplify';
 import { Amplify } from 'aws-amplify';
 
 function App({ signOut }) {
   const [ notes, setNotes ] = useState([])
 
   const fetchNotes = useCallback(async () => {
-    const result = await API.graphql({
+    const result = await Amplify.API.graphql({
       query: listNotes,
       authMode: 'AMAZON_COGNITO_USER_POOLS'
     })
@@ -18,7 +18,7 @@ function App({ signOut }) {
   }, [setNotes])
 
   const handleCreateNote = useCallback(async () => {
-    await API.graphql({
+    await Amplify.API.graphql({
       query: createNote,
       variables: { input: { text: window.prompt("New note") } },
       authMode: 'AMAZON_COGNITO_USER_POOLS'
@@ -27,7 +27,7 @@ function App({ signOut }) {
   }, [fetchNotes])
 
   const handleDeleteNote = useCallback(async (id) => {
-    await API.graphql({
+    await Amplify.API.graphql({
       query: deleteNote,
       variables: { input: { id: id } },
       authMode: 'AMAZON_COGNITO_USER_POOLS'
